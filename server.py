@@ -7,24 +7,35 @@ app = Flask(__name__)
 def process_data():
     try:
         data = request.json
-        if not data or 'value' not in data:
-            return jsonify({"error": "No data provided or 'value' not found"}), 400
+        if not data or 'value1' not in data or 'value2' not in data:
+            return jsonify({"error": "No data provided or 'value1' or 'value2' not found"}), 400
 
-        value = data['value']
+        value1 = data['value1']
+        value2 = data['value2']
 
-        # Попытка преобразовать строку в число, если это возможно
-        if isinstance(value, str):
+        # Попытка преобразовать строки в числа, если это возможно
+        if isinstance(value1, str):
             try:
-                value = float(value)
+                value1 = float(value1)
             except ValueError:
-                return jsonify({"error": "Value must be a number"}), 400
+                return jsonify({"error": "value1 must be a number"}), 400
+        
+        if isinstance(value2, str):
+            try:
+                value2 = float(value2)
+            except ValueError:
+                return jsonify({"error": "value2 must be a number"}), 400
 
-        if not isinstance(value, (int, float)):
-            return jsonify({"error": "Value must be a number"}), 400
+        if not isinstance(value1, (int, float)) or not isinstance(value2, (int, float)):
+            return jsonify({"error": "Both values must be numbers"}), 400
 
-        rounded_value = round(value, 1)
+        rounded_value1 = round(value1, 1)
+        rounded_value2 = round(value2, 1)
 
-        return jsonify({"rounded_value": rounded_value}), 200
+        return jsonify({
+            "rounded_value1": rounded_value1,
+            "rounded_value2": rounded_value2
+        }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
