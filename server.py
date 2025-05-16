@@ -22,7 +22,7 @@ def process_data():
         if not isinstance(value, (int, float)):
             return jsonify({"error": "Value must be a number"}), 400
 
-        rounded_value = round(value, 2)
+        rounded_value = round(value, 1)
 
         return jsonify({"rounded_value": rounded_value}), 200
 
